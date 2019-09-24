@@ -6,5 +6,4 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-#      uri: mongodb://localhost:27017/socialnetmessages
       database: socialnetmessages
