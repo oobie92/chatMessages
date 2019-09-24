@@ -1,0 +1,21 @@
+-- MONGO DB STRUCTURE --
+
+-- Company Collection --
+company: string
+group: string
+
+-- Agent Collection --
+id: _idString
+name: String
+
+-- Client Collection --
+idClient: string
+firstname: string
+lastname: string
+platform: string
+email: string
+
+-- Messages Collection --
+message: string
+date: date
+
