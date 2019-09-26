@@ -10,4 +10,6 @@ public interface ClientRepository extends MongoRepository<Client, String> {
     Client findByName(String name);
 
     Client findByLastName(String name);
+
+    Client getById(String id);
 }

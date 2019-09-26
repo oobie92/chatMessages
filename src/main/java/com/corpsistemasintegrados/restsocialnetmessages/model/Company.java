@@ -18,10 +18,7 @@ import java.time.LocalDateTime;
 @TypeAlias(value = "company")
 public class Company extends DocumentId {
 
-    private String name;
-    private String group;
-    @DBRef
-    private Agent agent;
-
+    private String companyName;
+    @DBRef private Agent agent;
     private LocalDateTime createdOn;
 }

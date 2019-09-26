@@ -5,10 +5,7 @@ import com.corpsistemasintegrados.restsocialnetmessages.repository.ClientReposit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -66,5 +63,27 @@ public class ClientController {
         }
 
         return new ResponseEntity<>(obj, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Client> getById(@PathVariable("id") String id) {
+
+        Client client = repo.getById(id);
+
+        if (client == null)  return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+        return new ResponseEntity<>(client, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Client> delete(@PathVariable("id") String id) {
+        Client client = repo.getById(id);
+
+        if (client != null) {
+            repo.delete(client);
+            return new ResponseEntity<>(client, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

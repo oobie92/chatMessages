@@ -22,7 +22,7 @@ public class PlatformController {
         List<Platform> platforms;
         platforms = repo.findAll();
 
-        if (!platforms.isEmpty()) return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if (platforms.isEmpty()) return new ResponseEntity(HttpStatus.NO_CONTENT);
 
         return new ResponseEntity<>(platforms, HttpStatus.OK);
     }
