@@ -8,6 +8,8 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -18,6 +20,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Agent extends DocumentId {
 
     private String name;
-    private String group;
+    private List<String> group;
 
 }

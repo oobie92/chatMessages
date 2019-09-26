@@ -3,11 +3,11 @@ package com.corpsistemasintegrados.restsocialnetmessages.controller;
 import com.corpsistemasintegrados.restsocialnetmessages.model.Agent;
 import com.corpsistemasintegrados.restsocialnetmessages.repository.AgentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,26 +18,49 @@ public class AgentController {
     private AgentRepository repo;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public List<Agent> findAll() {
-        return repo.findAll();
+    public ResponseEntity<List<Agent>> findAll() {
+        List<Agent> agents;
+        agents = repo.findAll();
+
+        if (!agents.isEmpty()) {
+            return new ResponseEntity<>(agents, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/findByName", method = RequestMethod.GET)
-    public Agent getByName(@RequestBody() Agent obj) {
+    public ResponseEntity<Agent> getByName(@RequestBody() Agent obj) {
         if (obj.getName() != null) {
-            return repo.findAgentByNameContains(obj.getName());
+            Agent agent = repo.findAgentByNameContains(obj.getName());
+            if (agent != null) {
+                return new ResponseEntity<>(agent, HttpStatus.OK);
+            }
         }
-
-        return new Agent();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public Agent save(@RequestBody() Agent obj) {
+    public ResponseEntity<Agent> save(@RequestBody() Agent obj) {
         if (obj.getName() != null){
-            repo.save(obj);
+            Agent newAgent = repo.save(obj);
+            if (newAgent != null) {
+                return new ResponseEntity<>(newAgent, HttpStatus.OK);
+            }
         }
 
-        return obj;
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@PathVariable("id") String id) {
+        Agent agent = repo.getById(id);
+        if (agent != null){
+            repo.delete(agent);
+            return new ResponseEntity<>(agent, HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }

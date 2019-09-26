@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface AgentRepository extends MongoRepository<Agent, String> {
 
     Agent findAgentByNameContains(String name);
+
+    Agent getById(String id);
 }
