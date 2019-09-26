@@ -5,19 +5,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "agent")
-@TypeAlias(value = "agent")
-public class Agent extends DocumentId {
+@Document(collection = "chat_message")
+@TypeAlias(value = "chat_message")
+public class ChatMessage extends DocumentId {
 
-    private String name;
-    private String group;
-
+    private String from;
+    private String to;
+    private String platform;
+    private LocalDateTime createdOn;
 }

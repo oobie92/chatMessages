@@ -18,13 +18,24 @@ public class AgentController {
     private AgentRepository repo;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public List<Agent> getById() {
+    public List<Agent> findAll() {
         return repo.findAll();
+    }
+
+    @RequestMapping(value = "/findByName", method = RequestMethod.GET)
+    public Agent getByName(@RequestBody() Agent obj) {
+        if (obj.getName() != null) {
+            return repo.findAgentByNameContains(obj.getName());
+        }
+
+        return new Agent();
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public Agent save(@RequestBody() Agent obj) {
-        if (obj.getName() != null) repo.save(obj);
+        if (obj.getName() != null){
+            repo.save(obj);
+        }
 
         return obj;
     }
