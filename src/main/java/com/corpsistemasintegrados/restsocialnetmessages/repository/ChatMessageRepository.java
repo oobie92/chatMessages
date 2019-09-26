@@ -9,9 +9,15 @@ public interface ChatMessageRepository extends MongoRepository<ChatMessage, Stri
 
     ChatMessage getById(String id);
 
-    List<ChatMessage> getBySender(String sender);
+    List<ChatMessage> getBySenderId(String sender);
 
-    List<ChatMessage> getByReceiver(String sender);
+    List<ChatMessage> getBySenderIdAndPlatform(String sender, String platform);
+
+    List<ChatMessage> getByReceiverId(String receiver);
+
+    List<ChatMessage> getByReceiverIdAndPlatform(String receiver, String platform);
+
+    List<ChatMessage> getBySenderIdAndReceiverId(String sender, String receiver);
 
     List<ChatMessage> getByPlatform(String platform);
 }

@@ -4,6 +4,7 @@ import com.corpsistemasintegrados.restsocialnetmessages.model.Agent;
 import com.corpsistemasintegrados.restsocialnetmessages.model.Company;
 import com.corpsistemasintegrados.restsocialnetmessages.repository.AgentRepository;
 import com.corpsistemasintegrados.restsocialnetmessages.repository.CompanyRepository;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("company")
+@Api(tags = "company")
 public class CompanyController {
 
     @Autowired

@@ -2,6 +2,7 @@ package com.corpsistemasintegrados.restsocialnetmessages.controller;
 
 import com.corpsistemasintegrados.restsocialnetmessages.model.Client;
 import com.corpsistemasintegrados.restsocialnetmessages.repository.ClientRepository;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("client")
+@Api(tags = "client")
 public class ClientController {
 
     @Autowired

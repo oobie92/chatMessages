@@ -17,8 +17,9 @@ import java.time.LocalDateTime;
 @TypeAlias(value = "chat_message")
 public class ChatMessage extends DocumentId {
 
-    private String sender;
-    private String receiver;
+    private String senderId;
+    private String receiverId;
     private String platform;
+    private String message;
     private LocalDateTime createdOn;
 }

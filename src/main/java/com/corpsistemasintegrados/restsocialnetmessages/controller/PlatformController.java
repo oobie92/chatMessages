@@ -2,6 +2,7 @@ package com.corpsistemasintegrados.restsocialnetmessages.controller;
 
 import com.corpsistemasintegrados.restsocialnetmessages.model.Platform;
 import com.corpsistemasintegrados.restsocialnetmessages.repository.PlatformRepository;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("platform")
+@Api(tags = "platform")
 public class PlatformController {
 
     @Autowired
