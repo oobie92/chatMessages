@@ -4,6 +4,9 @@ server:
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
+      host: 69.163.46.113
+      port: 2521
+      username: root
+      password: sisint122333
       database: socialnetmessages
+      authentication-database: SISADMIN
