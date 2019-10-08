@@ -7,11 +7,9 @@ spring:
     unique-names: true
   data:
     mongodb:
-#      host: 69.163.46.113
-      host: localhost
-#      port: 2521
-      port: 27017
+      host: 69.163.46.113
+      port: 2521
       username: root
-#      password: sisint122333
+      password: sisint122333
       database: socialnetmessages
-#      authentication-database: SISADMIN
+      authentication-database: SISADMIN
