@@ -2,6 +2,9 @@ server:
   port: 8111
 
 spring:
+  jmx:
+    default-domain=s: restsocialnetmessages
+    unique-names: true
   data:
     mongodb:
 #      host: 69.163.46.113
