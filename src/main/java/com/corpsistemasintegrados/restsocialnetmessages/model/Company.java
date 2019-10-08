@@ -19,6 +19,5 @@ import java.time.LocalDateTime;
 public class Company extends DocumentId {
 
     private String companyName;
-    @DBRef private Agent agent;
     private LocalDateTime createdOn;
 }

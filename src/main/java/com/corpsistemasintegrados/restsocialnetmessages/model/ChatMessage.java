@@ -21,5 +21,6 @@ public class ChatMessage extends DocumentId {
     private String receiverId;
     private String platform;
     private String message;
+    private String group;
     private LocalDateTime createdOn;
 }

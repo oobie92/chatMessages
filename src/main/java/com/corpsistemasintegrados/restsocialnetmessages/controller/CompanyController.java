@@ -21,8 +21,6 @@ public class CompanyController {
     @Autowired
     private CompanyRepository repo;
 
-    @Autowired
-    private AgentRepository agentRepository;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity findAll() {
@@ -36,20 +34,36 @@ public class CompanyController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<Company> save(@RequestBody() Company obj) {
-        if (obj.getCompanyName() != null && obj.getAgent().getId() != null){
+        if (obj.getCompanyName() != null){
 
-            Agent agent = agentRepository.getById(obj.getAgent().getId());
-
-            if (agent == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             Company company = new Company();
             company.setCompanyName(obj.getCompanyName());
-            company.setAgent(agent);
             company.setCreatedOn(LocalDateTime.now());
             repo.save(company);
 
             return new ResponseEntity<>(company, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/findByName", method = RequestMethod.GET)
+    public ResponseEntity getByName(@RequestParam("companyName") String companyName) {
+            List<Company> company = repo.getByCompanyName(companyName);
+            if (!company.isEmpty()) {
+                return new ResponseEntity<>(company, HttpStatus.OK);
+            }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Company> getById(@PathVariable("id") String id) {
+        Company company = repo.getById(id);
+
+        if (company != null) {
+            return new ResponseEntity<>(company, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

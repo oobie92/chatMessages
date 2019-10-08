@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -20,8 +19,9 @@ import java.util.ArrayList;
 public class Client extends DocumentId {
 
     private String name;
-    private String lastName;
+    private String lastname;
     private String email;
+    @DBRef private Company company;
+    private String platformName;
     private LocalDateTime createdOn;
-    @DBRef  private Platform platform;
 }
