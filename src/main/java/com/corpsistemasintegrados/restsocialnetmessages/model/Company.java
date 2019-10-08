@@ -20,4 +20,5 @@ public class Company extends DocumentId {
 
     private String companyName;
     private LocalDateTime createdOn;
+
 }
