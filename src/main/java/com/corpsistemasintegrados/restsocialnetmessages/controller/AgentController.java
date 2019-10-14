@@ -2,9 +2,11 @@ package com.corpsistemasintegrados.restsocialnetmessages.controller;
 
 import com.corpsistemasintegrados.restsocialnetmessages.model.Agent;
 import com.corpsistemasintegrados.restsocialnetmessages.model.Company;
+import com.corpsistemasintegrados.restsocialnetmessages.payload.HandleErrorPayload;
 import com.corpsistemasintegrados.restsocialnetmessages.repository.AgentRepository;
 import com.corpsistemasintegrados.restsocialnetmessages.repository.CompanyRepository;
 import io.swagger.annotations.Api;
+import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("agent")
@@ -48,18 +51,25 @@ public class AgentController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<Agent> save(@RequestBody() Agent obj) {
-        if (obj.getName() != null && obj.getCompany().getId() != null){
+    public ResponseEntity<?> save(@RequestBody() Agent obj) {
+        if (obj.getName() != null && obj.getCompany().getCompanyName() != null){
 
-            Company company = companyRepository.getById(obj.getCompany().getId());
-            if (company == null) return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            List<Company> companies = companyRepository.getByCompanyName(obj.getCompany().getCompanyName().toLowerCase());
+            if (companies.isEmpty()) return  new ResponseEntity<HandleErrorPayload>(new HandleErrorPayload("Company doesn't exist"), HttpStatus.CONFLICT);
 
+            Company company = companies.get(0);
+            
             Agent newAgent = new Agent();
             newAgent.setCompany(company);
             newAgent.setName(obj.getName());
             newAgent.setCreatedOn(LocalDateTime.now());
             repo.save(newAgent);
-            return new ResponseEntity<>(newAgent, HttpStatus.OK);
+            
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentContextPath().path("/RestSocialNetMessages/client/{name}")
+                    .buildAndExpand(newAgent.toString()).toUri();
+
+                return ResponseEntity.created(location).body(newAgent);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

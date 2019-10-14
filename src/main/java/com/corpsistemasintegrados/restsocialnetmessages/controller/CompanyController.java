@@ -2,9 +2,11 @@ package com.corpsistemasintegrados.restsocialnetmessages.controller;
 
 import com.corpsistemasintegrados.restsocialnetmessages.model.Agent;
 import com.corpsistemasintegrados.restsocialnetmessages.model.Company;
+import com.corpsistemasintegrados.restsocialnetmessages.payload.HandleErrorPayload;
 import com.corpsistemasintegrados.restsocialnetmessages.repository.AgentRepository;
 import com.corpsistemasintegrados.restsocialnetmessages.repository.CompanyRepository;
 import io.swagger.annotations.Api;
+import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("company")
@@ -33,22 +36,27 @@ public class CompanyController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<Company> save(@RequestBody() Company obj) {
+    public ResponseEntity<?> save(@RequestBody() Company obj) {
+        System.out.println(obj);
         if (obj.getCompanyName() != null){
 
             Company company = new Company();
-            company.setCompanyName(obj.getCompanyName());
+            company.setCompanyName(obj.getCompanyName().toLowerCase());
             company.setCreatedOn(LocalDateTime.now());
             repo.save(company);
+            
+            URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath().path("/RestSocialNetMessages/company/{name}")
+                .buildAndExpand(company.toString()).toUri();
 
-            return new ResponseEntity<>(company, HttpStatus.OK);
+            return ResponseEntity.created(location).body(company);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<HandleErrorPayload>(new HandleErrorPayload("Company name is required"), HttpStatus.CONFLICT);
     }
 
     @RequestMapping(value = "/findByName", method = RequestMethod.GET)
     public ResponseEntity getByName(@RequestParam("companyName") String companyName) {
-            List<Company> company = repo.getByCompanyName(companyName);
+            List<Company> company = repo.getByCompanyName(companyName.toLowerCase());
             if (!company.isEmpty()) {
                 return new ResponseEntity<>(company, HttpStatus.OK);
             }

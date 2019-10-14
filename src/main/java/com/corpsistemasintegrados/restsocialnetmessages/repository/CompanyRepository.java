@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface CompanyRepository extends MongoRepository<Company, String> {
 
-    Company getById(String id);
+    Company getById(String id);           
 
     List<Company> getByCompanyName(String companyName);
+    
 }
