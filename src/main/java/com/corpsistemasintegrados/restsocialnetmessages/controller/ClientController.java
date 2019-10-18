@@ -67,41 +67,36 @@ public class ClientController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<?> save(@RequestBody() Client obj) {
-        System.out.println(obj);
-        if (obj.getName() != null &&
-            obj.getId() != null &&
-            obj.getLastname() != null &&
-            obj.getEmail() != null &&
-            obj.getPlatformName() != null &&
-            obj.getCompany().getCompanyName() != null || obj.getCompany().getCompanyName().equals("")){            
-            List<Company> companies = companyRepository.getByCompanyName(obj.getCompany().getCompanyName().toLowerCase());
-            if(!companies.isEmpty()){
-                
-                Company company = companies.get(0);
-                
-                System.out.println("company");
-                System.out.println(company);                
-                Client client = new Client();
-                client.setId(obj.getId());
-                client.setName(obj.getName());
-                client.setPlatformName(obj.getPlatformName().toUpperCase());
-                client.setCompany(company);
-                client.setLastname(obj.getLastname());
-                client.setEmail(obj.getEmail());
-                client.setCreatedOn(LocalDateTime.now());
-                repo.save(client);
-
-                URI location = ServletUriComponentsBuilder
-                    .fromCurrentContextPath().path("/RestSocialNetMessages/client/{name}")
-                    .buildAndExpand(client.toString()).toUri();
-
-                return ResponseEntity.created(location).body(client);
-                
+//        System.out.println(obj);
+        if(obj.getId() != null) {
+            Client c = repo.getById(obj.getId());
+            if(c != null) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             
-            return  new ResponseEntity<HandleErrorPayload>(new HandleErrorPayload("Company doesn't exist"), HttpStatus.CONFLICT);
-            
+            if (obj.getName() != null && obj.getLastname() != null && obj.getPlatformName() != null &&
+                obj.getCompany().getCompanyName() != null || obj.getCompany().getCompanyName().equals("")) {            
+                List<Company> companies = companyRepository.getByCompanyName(obj.getCompany().getCompanyName().toLowerCase());
+                if(!companies.isEmpty()){
+                    Company company = companies.get(0);
+                    Client client = new Client();
+                    client.setId(obj.getId());
+                    client.setName(obj.getName());
+                    client.setPlatformName(obj.getPlatformName().toUpperCase());
+                    client.setCompany(company);
+                    client.setLastname(obj.getLastname());
+                    client.setEmail(obj.getEmail());
+                    client.setCreatedOn(LocalDateTime.now());
+                    repo.save(client);
+                    URI location = ServletUriComponentsBuilder
+                        .fromCurrentContextPath().path("/RestSocialNetMessages/client/{name}")
+                        .buildAndExpand(client.toString()).toUri();
+                    return ResponseEntity.created(location).body(client);
+                }
+                return  new ResponseEntity<HandleErrorPayload>(new HandleErrorPayload("Company doesn't exist"), HttpStatus.CONFLICT);            
+            }
         }
+        
         return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

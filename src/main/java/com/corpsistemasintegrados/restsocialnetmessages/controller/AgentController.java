@@ -52,27 +52,37 @@ public class AgentController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<?> save(@RequestBody() Agent obj) {
-        if (obj.getName() != null && obj.getCompany().getCompanyName() != null){
-
-            List<Company> companies = companyRepository.getByCompanyName(obj.getCompany().getCompanyName().toLowerCase());
-            if (companies.isEmpty()) return  new ResponseEntity<HandleErrorPayload>(new HandleErrorPayload("Company doesn't exist"), HttpStatus.CONFLICT);
-
-            Company company = companies.get(0);
+        if(obj.getId() != null) {
+            Agent agent = repo.getById(obj.getId());
+            if(agent != null) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
             
-            Agent newAgent = new Agent();
-            newAgent.setCompany(company);
-            newAgent.setName(obj.getName());
-            newAgent.setCreatedOn(LocalDateTime.now());
-            repo.save(newAgent);
-            
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentContextPath().path("/RestSocialNetMessages/client/{name}")
-                    .buildAndExpand(newAgent.toString()).toUri();
+            if (obj.getName() != null && obj.getCompany().getCompanyName() != null){
 
-                return ResponseEntity.created(location).body(newAgent);
+                List<Company> companies = companyRepository.getByCompanyName(obj.getCompany().getCompanyName().toLowerCase());
+                if (companies.isEmpty()) return  new ResponseEntity<HandleErrorPayload>(new HandleErrorPayload("Company doesn't exist"), HttpStatus.CONFLICT);
+
+                Company company = companies.get(0);
+
+                Agent newAgent = new Agent();
+                newAgent.setId(obj.getId());
+                newAgent.setCompany(company);
+                newAgent.setName(obj.getName());
+                newAgent.setCreatedOn(LocalDateTime.now());
+                repo.save(newAgent);
+
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentContextPath().path("/RestSocialNetMessages/client/{name}")
+                        .buildAndExpand(newAgent.toString()).toUri();
+
+                    return ResponseEntity.created(location).body(newAgent);
+            }
+            
         }
+        
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

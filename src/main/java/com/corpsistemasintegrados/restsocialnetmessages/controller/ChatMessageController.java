@@ -39,6 +39,8 @@ public class ChatMessageController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity save(@RequestBody() ChatMessage obj) {
+        System.out.println("obj");
+        System.out.println(obj);
         if (obj.getSenderId() != null &&
             obj.getReceiverId() != null &&
             obj.getMessage() != null &&
